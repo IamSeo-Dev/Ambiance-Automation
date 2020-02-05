@@ -1,6 +1,7 @@
 import tkinter as tk
 from datetime import date
 from email_sender import send_email
+import os.path
 
 
 class Application(tk.Frame):
@@ -19,10 +20,19 @@ class Application(tk.Frame):
         self.today = date.today().strftime("%m/%d/%y")
 
     def load_auto_saved_file(self):
+        if not os.path.isfile(f'Daily Report({date.today().strftime("%m%d%y")}).txt'):
+            open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'w')
+
+        if not os.path.isfile('TODO List.txt'):
+            open('TODO List.txt', 'w')
+
         with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'r', encoding='utf-8') as f:
             self.daily_report_text.insert(1.0, f.read())
         with open('TODO List.txt', 'r', encoding='utf-8') as f:
             self.todo_list_text.insert(1.0, f.read())
+
+
+
 
     def create_widgets(self):
         # Frames
