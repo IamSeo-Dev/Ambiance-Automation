@@ -6,6 +6,8 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import config
+import threading
+import time
 
 
 def convert_to_html(body):
@@ -27,17 +29,23 @@ def convert_to_html(body):
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.master = master
-        self.grid()
-        self.create_widgets()
-        self.load_auto_saved_file()
-
         # initialize local value
 
-        # date value for email Subject and email Body content
         # TODO LIST!
         # Currently, this value cannot be update automatically
         self.today = date.today().strftime("%m/%d/%y")
+        self.update_current_time()
+        self.master = master
+        self.grid()
+
+        self.create_widgets()
+        self.load_auto_saved_file()
+        self.auto_save()
+
+    def update_current_time(self):
+        self.named_tuple = time.localtime()  # get struct_time
+        self.time_string = time.strftime('at %H:%M:%S on %m/%d/%Y', self.named_tuple)
+
 
     def load_auto_saved_file(self):
         # it will check auto saved file exists or not
@@ -54,7 +62,7 @@ class Application(tk.Frame):
             self.todo_list_text.insert(1.0, f.read())
 
     def create_widgets(self):
-        self.master.title('Daliy Report Automation Ver 0.3 by Yooseok Seo')
+        self.master.title('Daliy Report Automation Ver 0.4 by Yooseok Seo')
         self.master.protocol('WM_DELETE_WINDOW', self.save_and_quit)
         # Frames
         self.main_menu_frame = tk.Frame(self.master).grid(row=0)
@@ -100,7 +108,10 @@ class Application(tk.Frame):
     def send_daily_report(self):
         (daily_text, todo_text) = self.retrieve_inputs()
         body_text = daily_text + todo_text
+        # threading
+        #saver = threading.Thread(target= self.send_email(body_text))
         self.send_email(body_text)
+        #saver.start()
 
     def retrieve_inputs(self):
         daily_report_title_text = f'Daily Report ({self.today})\n'
@@ -124,10 +135,15 @@ class Application(tk.Frame):
 
         with open('TODO List.txt', 'w', encoding='utf-8') as f:
             f.write(todo_list)
+        self.status_bar_update(f'Contents are saved successfully {self.time_string}')
 
-        self.status_bar_update('Contents are saved successfully.')
+    def auto_save(self):
+        self.save()
+        self.status_bar_update(f'Auto Saved {self.time_string}')
+        self.master.after(60000 * config.system_settings['auto_save_time_interval_min'], self.auto_save)
 
     def status_bar_update(self, text):
+        self.update_current_time()
         self.status_bar['text'] = text
 
     def send_email(self, body):
@@ -164,7 +180,7 @@ class Application(tk.Frame):
                 sender_email, receiver_email, message.as_string()
             )
 
-        self.status_bar_update('Daily Report was sent successfully.')
+        self.status_bar_update(f'Daily Report was sent successfully {self.time_string}')
 
 
 

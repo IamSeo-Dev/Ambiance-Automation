@@ -9,3 +9,4 @@
 	- Redmine(DMS)에 File Update "WHR Users Prints Table.xslx"
 *Ready To Put Away Undo Functionality WMS Issue로 등록
 	- WJ에 Email 로 관련 사항 문의
+*Mobile Device version update (v.39 -> v.40)
