@@ -9,6 +9,7 @@ class Application(tk.Frame):
         self.master = master
         self.grid()
         self.create_widgets()
+        self.load_auto_saved_file()
 
         # initalize local value
 
@@ -16,6 +17,12 @@ class Application(tk.Frame):
         # TODO LIST!
         # Currently, this value cannot be update automatically
         self.today = date.today().strftime("%m/%d/%y")
+
+    def load_auto_saved_file(self):
+        with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'r') as f:
+            self.daily_report_text.insert(1.0, f.read())
+        with open('TODO List.txt', 'r') as f:
+            self.todo_list_text.insert(1.0, f.read())
 
     def create_widgets(self):
         # Frames
@@ -61,12 +68,9 @@ class Application(tk.Frame):
         body_text = daily_text + todo_text
         send_email(body_text)
 
-        # TODO!
-        # Send Email Function Call Here
-
     def retrieve_inputs(self):
         daily_report_title_text = f'Daily Report ({self.today})\n'
         daily_report_text = daily_report_title_text + self.get_daily_report() + '\n'
         todo_list_title_text = f'TODO List\n'
         todo_list_text = todo_list_title_text + self.get_todo_list() + '\n'
-        return (daily_report_text, todo_list_text)
+        return daily_report_text, todo_list_text

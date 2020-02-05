@@ -38,7 +38,7 @@ def send_email(body):
     #    server.sendmail(
     #        sender_email, receiver_email, message.as_string()
     #    )
-    print(message.as_string())
+    #print(message.as_string())
 
 def convert_to_html(body):
     html_start_body_tag = '<html><body>'
@@ -52,5 +52,5 @@ def convert_to_html(body):
             html_body_content += '<br><p style="font-size: 15px">' + line + '</p>'
         else :
             html_body_content += '<div style="font-size: 13px">' + line + '</div>'
-    print(html_start_body_tag + html_body_content + html_end_body_tag)
+    #print(html_start_body_tag + html_body_content + html_end_body_tag)
     return html_start_body_tag + html_body_content + html_end_body_tag
