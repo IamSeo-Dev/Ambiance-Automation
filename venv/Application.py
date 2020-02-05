@@ -1,5 +1,6 @@
 import tkinter as tk
 from datetime import date
+from email_sender import *
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -44,15 +45,18 @@ class Application(tk.Frame):
 
         # Status Frame
         # TODO!
+    def get_daily_report_text(self):
+        return self.daily_report_text.get('1.0', 'end-1c')
+
+    def get_todo_list_text(self):
+        return self.todo_list_text.get('1.0', 'end-1c')
+
     def send_daily_report(self):
-        #self.retrieve_inputs()
-        print('sending')
+        daily_text = self.get_daily_report_text()
+        todo_text = self.get_todo_list_text()
+        prepare_message(daily_text, todo_text)
 
         # TODO!
         # Send Email Function Call Here
 
-    #def retrieve_inputs(self):
-        #self.daily_report_text_val += self.daily_report_text.get('1.0', 'end-1c')
-        #self.daily_report_text_val += '\n'
-        #self.todo_list_text_val += self.todo_list_text.get('1.0', 'end-1c')
 
