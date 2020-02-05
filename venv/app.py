@@ -20,6 +20,6 @@ def save_and_quit():
 
 root = tk.Tk()
 root.protocol('WM_DELETE_WINDOW', save_and_quit)
-root.title('Daliy Report Automation Ver 0.1 by Yooseok Seo')
+root.title('Daliy Report Automation Ver 0.2 by Yooseok Seo')
 app = Application(master=root)
 app.mainloop()
