@@ -1,8 +1,27 @@
 import tkinter as tk
 from datetime import date
-from email_sender import send_email
 from tkinter import messagebox
 import os.path
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import config
+
+
+def convert_to_html(body):
+    html_start_body_tag = '<html><body>'
+    html_end_body_tag = '</body></html>'
+    html_body_content = ''
+
+    for line in body.splitlines():
+        if "Daily Report" in line:
+            html_body_content += '<p style="font-size: 22px">' + line + '</p>'
+        elif "TODO" in line:
+            html_body_content += '<br><p style="font-size: 22px">' + line + '</p>'
+        else:
+            html_body_content += '<div style="font-size: 18px">' + line + '</div>'
+
+    return html_start_body_tag + html_body_content + html_end_body_tag
 
 
 class Application(tk.Frame):
@@ -48,12 +67,6 @@ class Application(tk.Frame):
         self.btn_frame = tk.Frame(self.content_frame).grid(row=2)
 
         # Main Menu Frame
-        #self.menu = tk.Menu(self.master)
-        #self.master.config(menu=menu)
-
-        # create the file object
-        #file = tk.Menu(self.menu)
-        #file.add_command(label='Quit', command=self.save_and_quit)
         # TODO!
 
         # Content Frame - Daily
@@ -73,8 +86,10 @@ class Application(tk.Frame):
         self.send_btn.grid(row=4, column=0, sticky='we')
         self.save_btn = tk.Button(self.btn_frame, text='Save', command=self.save)
         self.save_btn.grid(row=4, column=1, sticky='we')
+
         # Status Frame
-        # TODO!
+        self.status_bar = tk.Label(self.status_frame, text='Hello World', bd=1, relief=tk.SUNKEN, anchor=tk.W)
+        self.status_bar.grid(row=5, columnspan=2, sticky='wesn')
 
     def get_daily_report(self):
         return self.daily_report_text.get('1.0', 'end-1c')
@@ -85,7 +100,7 @@ class Application(tk.Frame):
     def send_daily_report(self):
         (daily_text, todo_text) = self.retrieve_inputs()
         body_text = daily_text + todo_text
-        send_email(body_text)
+        self.send_email(body_text)
 
     def retrieve_inputs(self):
         daily_report_title_text = f'Daily Report ({self.today})\n'
@@ -102,9 +117,55 @@ class Application(tk.Frame):
     def save(self):
         daily_report = self.get_daily_report()
         todo_list = self.get_todo_list()
+        self.status_bar_update('Contents are saving now...')
 
         with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'w', encoding='utf-8') as f:
             f.write(daily_report)
 
         with open('TODO List.txt', 'w', encoding='utf-8') as f:
             f.write(todo_list)
+
+        self.status_bar_update('Contents are saved successfully.')
+
+    def status_bar_update(self, text):
+        self.status_bar['text'] = text
+
+    def send_email(self, body):
+        # test value only
+        # sender_email = 'yooseokseo@ambianceapparel.com'
+        # receiver_email = 'yooseokseo@ambianceapparel.com'
+        sender_email = config.email_account_settings['username']
+        receiver_email = config.daily_report_settings['recipient']
+        password = config.email_account_settings['password']
+
+        message = MIMEMultipart('alternative')
+        message["Subject"] = f'Daily Report ({date.today().strftime("%m/%d/%y")})'
+        message["From"] = sender_email
+        message["To"] = receiver_email
+
+        # Create the HTML version of your message
+        html = convert_to_html(body)
+
+        # Turn these into plain/html MIMEText objects
+        part1 = MIMEText(html, "html")
+
+        # Add HTML/plain-text parts to MIMEMultipart message
+        # The email client will try to render the last part first
+        message.attach(part1)
+
+        # Create secure connection with server and send email
+        context = ssl.create_default_context()
+
+        with smtplib.SMTP_SSL(config.email_account_settings['outgoing_mail_server'],
+                              config.email_account_settings['server_port_number_SSL'],
+                              context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(
+                sender_email, receiver_email, message.as_string()
+            )
+
+        self.status_bar_update('Daily Report was sent successfully.')
+
+
+
+
