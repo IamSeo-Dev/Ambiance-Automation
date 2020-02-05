@@ -1,0 +1,6 @@
+*Veeam Backup Report 작성
+	- 특이사항 없음
+*Veeam Restore Test 실시
+	- STORE_AMBLAMBS
+*Store Bag Request Re-setup
+*Derek MNGN - 추가적으로 1TB HDD Drive 설치

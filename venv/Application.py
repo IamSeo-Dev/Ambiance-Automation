@@ -19,9 +19,9 @@ class Application(tk.Frame):
         self.today = date.today().strftime("%m/%d/%y")
 
     def load_auto_saved_file(self):
-        with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'r') as f:
+        with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'r', encoding='utf-8') as f:
             self.daily_report_text.insert(1.0, f.read())
-        with open('TODO List.txt', 'r') as f:
+        with open('TODO List.txt', 'r', encoding='utf-8') as f:
             self.todo_list_text.insert(1.0, f.read())
 
     def create_widgets(self):

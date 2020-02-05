@@ -9,10 +9,10 @@ def save_and_quit():
         daily_report = app.get_daily_report()
         todo_list = app.get_todo_list()
 
-        with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'w') as f:
+        with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'w', encoding='utf-8') as f:
             f.write(daily_report)
 
-        with open('TODO List.txt', 'w') as f:
+        with open('TODO List.txt', 'w', encoding='utf-8') as f:
             f.write(todo_list)
 
         root.destroy()
