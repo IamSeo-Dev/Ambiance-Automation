@@ -10,6 +10,10 @@ Main Goal
 
 - this application will save data as a file when a user clicks "Save" button. (ver.0.3)
 
+- this application will display it's status when a user asks to do something such as saving,sending reports. (ver.0.4)
+
+- this application will have menu bar in the top of the application. (ver.0.5)
+
 Fixed
 - UnicodeEncodeError: 'ascii' codec can't encode character '\u2013' in position 136: ordinal not in range(128)
     * Decide to use 'email' library to handel unicode Error
