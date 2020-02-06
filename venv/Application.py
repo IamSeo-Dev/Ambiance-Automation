@@ -114,7 +114,7 @@ class Application(tk.Frame):
         self.save_btn.grid(row=4, column=1, sticky='we')
 
         # Status Frame
-        self.status_bar = tk.Label(self.status_frame, text='Hello World', bd=1, relief=tk.SUNKEN, anchor=tk.W)
+        self.status_bar = tk.Label(self.status_frame, text='Ready', bd=1, relief=tk.SUNKEN, anchor=tk.W)
         self.status_bar.grid(row=5, columnspan=2, sticky='wesn')
 
     def get_daily_report(self):
@@ -198,7 +198,7 @@ class Application(tk.Frame):
                 sender_email, receiver_email, message.as_string()
             )
 
-        self.status_bar_update(f'Daily Report was sent successfully {self.time_string}')
+        self.status_bar_update(f'Daily Report was sent to [{config.daily_report_settings["recipient"]}] successfully {self.time_string}')
 
 
 

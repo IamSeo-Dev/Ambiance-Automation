@@ -9,3 +9,4 @@
 	- Symantec 설정
 	- Veeam Backup 설정
 	- Printer/Scan 설정
+	- User/PC creation procedure 진행 후 보고 
