@@ -10,7 +10,7 @@ Main Goal
 
 - this application will save data as a file when a user clicks "Save" button. (ver.0.3)
 
-- this application will display it's status when a user asks to do something such as saving,sending reports. (ver.0.4)
+- this application will display its status when a user asks to do something such as saving,sending reports. (ver.0.4)
 
 - this application will have menu bar in the top of the application. (ver.0.5)
 
