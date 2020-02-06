@@ -1,12 +1,18 @@
 *Veeam Backup Report 작성
 	- 특이사항 없음
+
 *Veeam Restore Test 실시
 	- STORE_AMBLAMBS
+
 *Store Bag Request Re-setup
+
 *Derek MNGN - 추가적으로 1TB HDD Drive 설치
+
 *Store Label Printer Sharing for "Print Carton" Function
 	- File Update후 WJ에 보냄
 	- Redmine(DMS)에 File Update "WHR Users Prints Table.xslx"
+
 *Ready To Put Away Undo Functionality WMS Issue로 등록
 	- WJ에 Email 로 관련 사항 문의
+
 *Mobile Device version update (v.39 -> v.40)

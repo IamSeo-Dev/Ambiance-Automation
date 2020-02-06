@@ -11,17 +11,18 @@ import time
 
 
 def convert_to_html(body):
-    html_start_body_tag = '<html><body>'
+    html_start_body_tag = '<html><head><style>p { font-size: 22px; font-family: Arial} div{font-size: 16px; ' \
+                          'font-family: Arial}</style></head><body>'
     html_end_body_tag = '</body></html>'
     html_body_content = ''
 
     for line in body.splitlines():
         if "Daily Report" in line:
-            html_body_content += '<p style="font-size: 22px">' + line + '</p>'
+            html_body_content += '<p>' + line + '</p>'
         elif "TODO" in line:
-            html_body_content += '<br><p style="font-size: 22px">' + line + '</p>'
+            html_body_content += '<br><p>' + line + '</p>'
         else:
-            html_body_content += '<div style="font-size: 18px">' + line + '</div>'
+            html_body_content += '<div>' + line + '</div>'
 
     return html_start_body_tag + html_body_content + html_end_body_tag
 
