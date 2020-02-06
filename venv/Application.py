@@ -66,7 +66,7 @@ class Application(tk.Frame):
             self.todo_list_text.insert(1.0, f.read())
 
     def create_widgets(self):
-        self.master.title('Daliy Report Automation Ver 0.4 by Yooseok Seo')
+        self.master.title('Daliy Report Automation Ver 0.5 by Yooseok Seo')
         self.master.protocol('WM_DELETE_WINDOW', self.save_and_quit)
         # Frames
         self.main_menu_frame = tk.Frame(self.master).grid(row=0)
