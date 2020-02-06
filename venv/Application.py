@@ -43,6 +43,9 @@ class Application(tk.Frame):
         self.load_auto_saved_file()
         self.auto_save()
 
+    def do_nothing(self):
+        print('nothing')
+
     def update_current_time(self):
         self.named_tuple = time.localtime()  # get struct_time
         self.time_string = time.strftime('at %H:%M:%S on %m/%d/%Y', self.named_tuple)
@@ -76,7 +79,21 @@ class Application(tk.Frame):
         self.btn_frame = tk.Frame(self.content_frame).grid(row=2)
 
         # Main Menu Frame
-        # TODO!
+        self.menu_bar = tk.Menu(self.master)
+        file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        file_menu.add_command(label='New...', command=self.do_nothing)
+        file_menu.add_command(label='Open...', command=self.do_nothing)
+        file_menu.add_command(label='Save...', command=self.save)
+        file_menu.add_separator()
+        file_menu.add_command(label='Settings', command=self.do_nothing)
+        file_menu.add_separator()
+        file_menu.add_command(label='Exit', command=self.save_and_quit)
+        self.menu_bar.add_cascade(label='File', menu=file_menu)
+        self.master.config(menu=self.menu_bar)
+        help_menu = tk.Menu(self.menu_bar, tearoff=0)
+        help_menu.add_command(label='About Daily Report', command=self.do_nothing)
+        self.menu_bar.add_cascade(label='Help', menu=help_menu)
+
 
         # Content Frame - Daily
         self.daily_report_title_label = tk.Label(self.daily_frame, text='Daily Report')
