@@ -6,7 +6,6 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import config
-import threading
 import time
 
 
@@ -31,14 +30,14 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         # initialize local value
-
+        self.daily_report_path = 'Daily\\'
+        self.todo_list_path = 'Todo\\'
         # TODO LIST!
         # Currently, this value cannot be update automatically
         self.today = date.today().strftime("%m/%d/%y")
         self.update_current_time()
         self.master = master
         self.grid()
-
         self.create_widgets()
         self.load_auto_saved_file()
         self.auto_save()
@@ -47,26 +46,26 @@ class Application(tk.Frame):
         print('nothing')
 
     def update_current_time(self):
-        self.named_tuple = time.localtime()  # get struct_time
-        self.time_string = time.strftime('at %H:%M:%S on %m/%d/%Y', self.named_tuple)
-
+        self.stime = time.localtime()  # get struct_time
+        self.time_string = time.strftime('at %H:%M:%S on %m/%d/%Y', self.stime)
 
     def load_auto_saved_file(self):
         # it will check auto saved file exists or not
         # if not, it will create a new file for saving
-        if not os.path.isfile(f'Daily Report({date.today().strftime("%m%d%y")}).txt'):
-            open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'w')
 
-        if not os.path.isfile('TODO List.txt'):
-            open('TODO List.txt', 'w')
+        if not os.path.isfile(f'{self.daily_report_path}Daily Report({date.today().strftime("%m%d%y")}).txt'):
+            open(f'{self.daily_report_path}Daily Report({date.today().strftime("%m%d%y")}).txt', 'w')
 
-        with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'r', encoding='utf-8') as f:
+        if not os.path.isfile(f'{self.todo_list_path}TODO List.txt'):
+            open(f'{selg.todo_list_path}TODO List.txt', 'w')
+
+        with open(f'{self.daily_report_path}Daily Report({date.today().strftime("%m%d%y")}).txt', 'r', encoding='utf-8') as f:
             self.daily_report_text.insert(1.0, f.read())
-        with open('TODO List.txt', 'r', encoding='utf-8') as f:
+        with open(f'{self.todo_list_path}TODO List.txt', 'r', encoding='utf-8') as f:
             self.todo_list_text.insert(1.0, f.read())
 
     def create_widgets(self):
-        self.master.title('Daliy Report Automation Ver 0.5 by Yooseok Seo')
+        self.master.title('Ambiance Task Automation Ver 0.5 by Yooseok Seo')
         self.master.protocol('WM_DELETE_WINDOW', self.save_and_quit)
         # Frames
         self.main_menu_frame = tk.Frame(self.master).grid(row=0)
@@ -93,7 +92,6 @@ class Application(tk.Frame):
         help_menu = tk.Menu(self.menu_bar, tearoff=0)
         help_menu.add_command(label='About Daily Report', command=self.do_nothing)
         self.menu_bar.add_cascade(label='Help', menu=help_menu)
-
 
         # Content Frame - Daily
         self.daily_report_title_label = tk.Label(self.daily_frame, text='Daily Report')
@@ -127,9 +125,9 @@ class Application(tk.Frame):
         (daily_text, todo_text) = self.retrieve_inputs()
         body_text = daily_text + todo_text
         # threading
-        #saver = threading.Thread(target= self.send_email(body_text))
+        # saver = threading.Thread(target= self.send_email(body_text))
         self.send_email(body_text)
-        #saver.start()
+        # saver.start()
 
     def retrieve_inputs(self):
         daily_report_title_text = f'Daily Report ({self.today})\n'
@@ -139,7 +137,7 @@ class Application(tk.Frame):
         return daily_report_text, todo_list_text
 
     def save_and_quit(self):
-        if messagebox.askokcancel('Quit', 'Do you really wish to quit?'):
+        if messagebox.askokcancel('Quit', 'Do You Really Wish To Quit?'):
             self.save()
             self.master.destroy()
 
@@ -148,26 +146,23 @@ class Application(tk.Frame):
         todo_list = self.get_todo_list()
         self.status_bar_update('Contents are saving now...')
 
-        with open(f'Daily Report({date.today().strftime("%m%d%y")}).txt', 'w', encoding='utf-8') as f:
+        with open(f'{self.daily_report_path}Daily Report({date.today().strftime("%m%d%y")}).txt', 'w', encoding='utf-8') as f:
             f.write(daily_report)
 
-        with open('TODO List.txt', 'w', encoding='utf-8') as f:
+        with open(f'{self.todo_list_path}TODO List.txt', 'w', encoding='utf-8') as f:
             f.write(todo_list)
         self.status_bar_update(f'Contents are saved successfully {self.time_string}')
 
     def auto_save(self):
         self.save()
         self.status_bar_update(f'Auto Saved {self.time_string}')
-        self.master.after(60000 * config.system_settings['auto_save_time_interval_min'], self.auto_save)
+        self.master.after(60000 * config.general_settings['auto_save_time_interval_min'], self.auto_save)
 
     def status_bar_update(self, text):
         self.update_current_time()
         self.status_bar['text'] = text
 
     def send_email(self, body):
-        # test value only
-        # sender_email = 'yooseokseo@ambianceapparel.com'
-        # receiver_email = 'yooseokseo@ambianceapparel.com'
         sender_email = config.email_account_settings['username']
         receiver_email = config.daily_report_settings['recipient']
         password = config.email_account_settings['password']
@@ -198,8 +193,5 @@ class Application(tk.Frame):
                 sender_email, receiver_email, message.as_string()
             )
 
-        self.status_bar_update(f'Daily Report was sent to [{config.daily_report_settings["recipient"]}] successfully {self.time_string}')
-
-
-
-
+        self.status_bar_update(
+            f'Daily Report was sent to [{config.daily_report_settings["recipient"]}] successfully {self.time_string}')
