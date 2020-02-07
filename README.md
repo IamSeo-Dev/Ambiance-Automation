@@ -19,6 +19,5 @@ Fixed
     * Decide to use 'email' library to handel unicode Error
 - No file (Auto-saved file) exist Error:
     * it will check whether saved file exists or not, if not it will create a new file.
-
-Need to Fix
-- Application.self.today value should be updated automatically.
+- Application.self.today(Date) value update issue:
+    * the value will be update when the app did auto-saving.

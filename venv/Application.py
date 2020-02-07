@@ -1,6 +1,8 @@
-import tkinter as tk
-from datetime import date
+from tkinter import *
+from tkinter.ttk import *
 from tkinter import messagebox
+from datetime import date
+
 import os.path
 import smtplib, ssl
 from email.mime.text import MIMEText
@@ -26,7 +28,7 @@ def convert_to_html(body):
     return html_start_body_tag + html_body_content + html_end_body_tag
 
 
-class Application(tk.Frame):
+class Application(Frame):
     def __init__(self, master=None):
         super().__init__(master)
         # initialize local value
@@ -44,6 +46,9 @@ class Application(tk.Frame):
 
     def do_nothing(self):
         print('nothing')
+
+    def update_today_date(self):
+        self.today = date.today().strftime("%m/%d/%y")
 
     def update_current_time(self):
         self.stime = time.localtime()  # get struct_time
@@ -67,19 +72,11 @@ class Application(tk.Frame):
     def create_widgets(self):
         self.master.title('Ambiance Task Automation Ver 0.5 by Yooseok Seo')
         self.master.protocol('WM_DELETE_WINDOW', self.save_and_quit)
-        # Frames
-        self.main_menu_frame = tk.Frame(self.master).grid(row=0)
-        self.content_frame = tk.Frame(self.master).grid(row=1)
-        self.status_frame = tk.Frame(self.master).grid(row=2)
-
-        # Sub Frames
-        self.daily_frame = tk.Frame(self.content_frame).grid(row=0)
-        self.todo_frame = tk.Frame(self.content_frame).grid(row=1)
-        self.btn_frame = tk.Frame(self.content_frame).grid(row=2)
 
         # Main Menu Frame
-        self.menu_bar = tk.Menu(self.master)
-        file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.main_menu_frame = Frame(self.master).grid(row=0)
+        self.menu_bar = Menu(self.master)
+        file_menu = Menu(self.menu_bar, tearoff=0)
         file_menu.add_command(label='New...', command=self.do_nothing)
         file_menu.add_command(label='Open...', command=self.do_nothing)
         file_menu.add_command(label='Save...', command=self.save)
@@ -89,31 +86,53 @@ class Application(tk.Frame):
         file_menu.add_command(label='Exit', command=self.save_and_quit)
         self.menu_bar.add_cascade(label='File', menu=file_menu)
         self.master.config(menu=self.menu_bar)
-        help_menu = tk.Menu(self.menu_bar, tearoff=0)
+        help_menu = Menu(self.menu_bar, tearoff=0)
         help_menu.add_command(label='About Daily Report', command=self.do_nothing)
         self.menu_bar.add_cascade(label='Help', menu=help_menu)
 
+        # Tab Menu
+        #self.content_frame = tk.Frame(self.master).grid(row=1, rowspan=6)
+        self.tab_control = Notebook(self.master)
+        self.tab_control.grid(row=1, sticky='wens')
+        self.daily_frame = Frame()
+        self.weekly_frame = Frame()
+        self.backup_frame = Frame()
+
+        # Notebook (Tab Frames)
+
+        daily_icon = PhotoImage(file=r'icon\test.png')
+        self.tab_control.add(self.daily_frame, text='Daily', image=daily_icon, compound=TOP)
+        self.tab_control.add(self.weekly_frame, text='Weekly', image=daily_icon, compound=TOP)
+        self.tab_control.add(self.backup_frame, text='Backup', image=daily_icon, compound=TOP)
+
+
+
+
+
+
         # Content Frame - Daily
-        self.daily_report_title_label = tk.Label(self.daily_frame, text='Daily Report')
-        self.daily_report_title_label.grid(row=0, sticky='w', columnspan=2)
-        self.daily_report_text = tk.Text(self.daily_frame)
-        self.daily_report_text.grid(row=1, columnspan=2)
+        self.daily_report_title_label = Label(self.daily_frame, text='Daily Report')
+        self.daily_report_title_label.grid(row=2, sticky='w', columnspan=2)
+        self.daily_report_text = Text(self.daily_frame)
+        self.daily_report_text.grid(row=3, columnspan=2)
 
         # Content Frame - Todo
-        self.todo_list_title_label = tk.Label(self.todo_frame, text='Todo List')
-        self.todo_list_title_label.grid(row=2, sticky='w', columnspan=2)
-        self.todo_list_text = tk.Text(self.todo_frame)
-        self.todo_list_text.grid(row=3, columnspan=2)
+        self.todo_list_title_label = Label(self.daily_frame, text='Todo List')
+        self.todo_list_title_label.grid(row=4, sticky='w', columnspan=2)
+        self.todo_list_text = Text(self.daily_frame)
+        self.todo_list_text.grid(row=5, columnspan=2)
 
         # Content Frame - Btn
-        self.send_btn = tk.Button(self.btn_frame, text='Send', command=self.send_daily_report)
-        self.send_btn.grid(row=4, column=0, sticky='we')
-        self.save_btn = tk.Button(self.btn_frame, text='Save', command=self.save)
-        self.save_btn.grid(row=4, column=1, sticky='we')
+        self.send_btn = Button(self.daily_frame, text='Send', command=self.send_daily_report)
+        self.send_btn.grid(row=6, column=0, sticky='we')
+        self.save_btn = Button(self.daily_frame, text='Save', command=self.save)
+        self.save_btn.grid(row=6, column=1, sticky='we')
 
         # Status Frame
-        self.status_bar = tk.Label(self.status_frame, text='Ready', bd=1, relief=tk.SUNKEN, anchor=tk.W)
-        self.status_bar.grid(row=5, columnspan=2, sticky='wesn')
+        self.status_frame = Frame(self.master).grid(row=7)
+
+        self.status_bar = Label(self.status_frame, text='Ready', relief=SUNKEN, anchor=W)
+        self.status_bar.grid(row=7, columnspan=2, sticky='wesn')
 
     def get_daily_report(self):
         return self.daily_report_text.get('1.0', 'end-1c')
@@ -155,6 +174,7 @@ class Application(tk.Frame):
 
     def auto_save(self):
         self.save()
+        self.update_today_date()
         self.status_bar_update(f'Auto Saved {self.time_string}')
         self.master.after(60000 * config.general_settings['auto_save_time_interval_min'], self.auto_save)
 
