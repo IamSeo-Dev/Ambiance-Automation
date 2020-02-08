@@ -1,0 +1,12 @@
+*Veeam Backup Report 작성
+*Veeam Backup Restore Test 진행
+	- Intranet1_QA
+*Kyunghye - Adobe Activation Issue로 PC 교체
+	- A10219 - > A10677
+	- File Transfer
+	- Portal Asset Info Update
+	- Outlook 설정
+	- Symantec 설정
+	- Veeam Backup 설정
+	- Printer/Scan 설정
+	- User/PC creation procedure 진행 후 보고 
