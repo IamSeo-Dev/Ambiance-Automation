@@ -40,6 +40,7 @@ class Application(Frame):
         self.update_current_time()
         self.master = master
         self.grid()
+        self.create_styles()
         self.create_widgets()
         self.load_auto_saved_file()
         self.auto_save()
@@ -68,6 +69,14 @@ class Application(Frame):
             self.daily_report_text.insert(1.0, f.read())
         with open(f'{self.todo_list_path}TODO List.txt', 'r', encoding='utf-8') as f:
             self.todo_list_text.insert(1.0, f.read())
+
+    def create_styles(self):
+        style = Style()
+        style.theme_create("MyStyle", parent="alt", settings={
+            "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0]}},
+            "TNotebook.Tab": {"configure": {"padding": [5, 5]}, }})
+
+        style.theme_use("MyStyle")
 
     def create_widgets(self):
         self.master.title('Ambiance Task Automation Ver 0.5 by Yooseok Seo')
@@ -100,10 +109,12 @@ class Application(Frame):
 
         # Notebook (Tab Frames)
 
-        daily_icon = PhotoImage(file=r'icon\test.png')
-        self.tab_control.add(self.daily_frame, text='Daily', image=daily_icon, compound=TOP)
-        self.tab_control.add(self.weekly_frame, text='Weekly', image=daily_icon, compound=TOP)
-        self.tab_control.add(self.backup_frame, text='Backup', image=daily_icon, compound=TOP)
+        self.daily_icon = PhotoImage(file=r'icon\daily_r.png')
+        self.weekly_icon = PhotoImage(file=r'icon\weekly_r.png')
+        self.backup_icon = PhotoImage(file=r'icon\backup.png')
+        self.tab_control.add(self.daily_frame, text='  Daily  ', image=self.daily_icon, compound=TOP)
+        self.tab_control.add(self.weekly_frame, text='Weekly', image=self.weekly_icon, compound=TOP)
+        self.tab_control.add(self.backup_frame, text='Backup', image=self.backup_icon, compound=TOP)
 
 
 

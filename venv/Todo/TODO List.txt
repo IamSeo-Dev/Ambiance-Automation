@@ -1,11 +1,15 @@
 1. Miki Flores - Backup Solution
-2. 15가 Label Printer Setup (PC is ready)
-3. WMS App Export Function Follow-up
-4. Veeam Backup Error Handle
-	- Sure Backup Error Handle (name Global Catalog, error code 10060)
-5. Veeam Backup Tape 현황 조사
 
-6. Stock Adjustment/Put Away/Bin Movement Test
-7. UPS Data Transfer on A20217 (Stand alone ver)
-8. Ship out 되는것 Procedure 확인 (월요일)
-9. A동 5개 Rack에 대해서 Stock 확인
+2. 15가 Label Printer Setup (PC is ready)
+
+3. WMS App Export Function Follow-up
+
+4. Veeam Backup Tape 현황 조사
+
+5. Stock Adjustment/Put Away/Bin Movement Test
+
+6. UPS Data Transfer on A20217 (Stand alone ver)
+
+7. Ship out 되는것 Procedure 확인 (월요일)
+
+8. A동 5개 Rack에 대해서 Stock 확인 (월요일)
