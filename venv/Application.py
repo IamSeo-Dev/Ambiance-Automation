@@ -2,7 +2,6 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import messagebox
 from datetime import date
-
 import os.path
 import smtplib, ssl
 from email.mime.text import MIMEText
@@ -115,11 +114,6 @@ class Application(tk.Frame):
         self.tab_control.add(self.daily_frame, text='  Daily  ', image=self.daily_icon, compound='top')
         self.tab_control.add(self.weekly_frame, text='Weekly', image=self.weekly_icon, compound='top')
         self.tab_control.add(self.backup_frame, text='Backup', image=self.backup_icon, compound='top')
-
-
-
-
-
 
         # Content Frame - Daily
         self.daily_report_title_label = ttk.Label(self.daily_frame, text='Daily Report')
