@@ -52,6 +52,18 @@ class Application(tk.Frame):
     def do_nothing(self):
         print('nothing')
 
+    def update_config(self):
+        print('config updated')
+        config.email_account_settings['outgoing_mail_server'] = self.email_entry1.get()
+        config.email_account_settings['server_port_number_SSL'] = self.email_entry2.get()
+        config.email_account_settings['username'] = self.email_entry3.get()
+        config.email_account_settings['password'] = self.email_entry4.get()
+
+        config.daily_report_settings['recipient'] = self.daily_entry1.get()
+        config.daily_report_settings['subject'] = self.daily_entry2.get()
+
+
+
     def create_settings_widgets(self):
         settings = tk.Toplevel()
         settings.title('Settings')
@@ -94,26 +106,38 @@ class Application(tk.Frame):
         email_content_2_2 = ttk.Label(email_settings_frame, text='Password : ', font=CONTENT)
         email_content_2_2.grid(row=5, sticky='W', padx=(10, 2))
 
-        email_entry1 = ttk.Entry(email_settings_frame, justify='center', width=40)
-        email_entry1.grid(row=1, column=1)
-        email_entry1.insert(0, config.email_account_settings['outgoing_mail_server'])
-        email_entry2 = ttk.Entry(email_settings_frame, justify='center', width=40)
-        email_entry2.grid(row=2, column=1)
-        email_entry2.insert(0, config.email_account_settings['server_port_number_SSL'])
-        email_entry3 = ttk.Entry(email_settings_frame, justify='center', width=40)
-        email_entry3.grid(row=4, column=1)
-        email_entry3.insert(0, config.email_account_settings['username'])
-        email_entry4 = ttk.Entry(email_settings_frame, justify='center', width=40, show='*')
-        email_entry4.grid(row=5, column=1)
-        email_entry4.insert(0, config.email_account_settings['password'])
+        self.email_entry1 = ttk.Entry(email_settings_frame, justify='center', width=40)
+        self.email_entry1.grid(row=1, column=1)
+        self.email_entry1.insert(0, config.email_account_settings['outgoing_mail_server'])
+        self.email_entry2 = ttk.Entry(email_settings_frame, justify='center', width=40)
+        self.email_entry2.grid(row=2, column=1)
+        self.email_entry2.insert(0, config.email_account_settings['server_port_number_SSL'])
+        self.email_entry3 = ttk.Entry(email_settings_frame, justify='center', width=40)
+        self.email_entry3.grid(row=4, column=1)
+        self.email_entry3.insert(0, config.email_account_settings['username'])
+        self.email_entry4 = ttk.Entry(email_settings_frame, justify='center', width=40, show='*')
+        self.email_entry4.grid(row=5, column=1)
+        self.email_entry4.insert(0, config.email_account_settings['password'])
         test_btn = tk.Button(email_settings_frame, text='Send Test Email', font=BUTTON)
         test_btn.grid(row=6, column=1, pady=(10, 1))
 
+        daily_title_1 = ttk.Label(daily_settings_frame, text='Daily Report', font=TITLE)
+        daily_title_1.grid(row=0, sticky='W', padx=(5, 1), pady=(10, 1))
+        daily_content_1_1 = ttk.Label(daily_settings_frame, text='Recipient : ', font=CONTENT)
+        daily_content_1_1.grid(row=1, sticky='W', padx=(10, 2))
+        daily_content_1_2 = ttk.Label(daily_settings_frame, text='Subject : ', font=CONTENT)
+        daily_content_1_2.grid(row=2, sticky='W', padx=(10, 2))
+        self.daily_entry1 = ttk.Entry(daily_settings_frame, justify='center', width=40)
+        self.daily_entry1.grid(row=1, column=1)
+        self.daily_entry1.insert(0, config.daily_report_settings['recipient'])
+        self.daily_entry2 = ttk.Entry(daily_settings_frame, justify='center', width=40)
+        self.daily_entry2.grid(row=2, column=1)
+        self.daily_entry2.insert(0, config.daily_report_settings['subject'])
 
-        btn1 = tk.Button(btn_frame, text='OK', font=BUTTON)
-        btn1.grid(row=0, column=0, sticky='we')
-        btn2 = tk.Button(btn_frame, text='Cancel', font=BUTTON)
-        btn2.grid(row=0, column=1, sticky='we')
+        ok_settings_btn = tk.Button(btn_frame, text='OK', font=BUTTON, command=lambda: self.update_config())
+        ok_settings_btn.grid(row=0, column=0, sticky='we')
+        cancel_settings_btn = tk.Button(btn_frame, text='Cancel', font=BUTTON)
+        cancel_settings_btn.grid(row=0, column=1, sticky='we')
 
 
 
@@ -266,7 +290,7 @@ class Application(tk.Frame):
         password = config.email_account_settings['password']
 
         message = MIMEMultipart('alternative')
-        message["Subject"] = f'Daily Report ({date.today().strftime("%m/%d/%y")})'
+        message["Subject"] = config.daily_report_settings['subject']
         message["From"] = sender_email
         message["To"] = receiver_email
 
