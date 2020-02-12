@@ -1,16 +1,14 @@
-1. Miki Flores - Backup Solution
+1. Miki Flores 
+	- Backup Solution
+	- FBM Printer Setup for Catalina 문의
 
-2. Miki Flores - FBM Printer Setup for Catalina 문의
+2. WMS App Export Function Follow up
 
-3. WMS App Export Function Follow-up
+3. UPS Data Transfer on A20217 (Stand alone ver)
 
-4. Veeam Backup Tape 현황 조사
+4. Yujin 
+	- Portal File Upload issue
 
-5. UPS Data Transfer on A20217 (Stand alone ver)
-
-6. Yujin - Portal File Upload issue
-
-7. Heather - how to connect network driver in illustrator
 
 
 

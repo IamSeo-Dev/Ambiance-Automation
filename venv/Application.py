@@ -22,6 +22,10 @@ def convert_to_html(body):
             html_body_content += '<p>' + line + '</p>'
         elif "TODO" in line:
             html_body_content += '<br><p>' + line + '</p>'
+        elif "" == line:
+            html_body_content += '<br>'
+        elif "-" in line:
+            html_body_content += '<div>&nbsp&nbsp&nbsp&nbsp&nbsp' + line + '</div>'
         else:
             html_body_content += '<div>' + line + '</div>'
 
@@ -92,20 +96,18 @@ class Application(tk.Frame):
 
         email_entry1 = ttk.Entry(email_settings_frame, justify='center', width=40)
         email_entry1.grid(row=1, column=1)
-        email_entry1.insert(0, config.general_settings['outgoing_mail_server'])
-        # Todo
-        # need to call from config.py file
+        email_entry1.insert(0, config.email_account_settings['outgoing_mail_server'])
         email_entry2 = ttk.Entry(email_settings_frame, justify='center', width=40)
         email_entry2.grid(row=2, column=1)
-        email_entry2.insert(0, config.general_settings['server_port_number_SSL'])
+        email_entry2.insert(0, config.email_account_settings['server_port_number_SSL'])
         email_entry3 = ttk.Entry(email_settings_frame, justify='center', width=40)
         email_entry3.grid(row=4, column=1)
-        email_entry3.insert(0, config.general_settings['username'])
+        email_entry3.insert(0, config.email_account_settings['username'])
         email_entry4 = ttk.Entry(email_settings_frame, justify='center', width=40, show='*')
         email_entry4.grid(row=5, column=1)
-        email_entry4.insert(0, config.general_settings['password'])
+        email_entry4.insert(0, config.email_account_settings['password'])
         test_btn = tk.Button(email_settings_frame, text='Send Test Email', font=BUTTON)
-        test_btn.grid(row=6, column=1, pady=(10,1))
+        test_btn.grid(row=6, column=1, pady=(10, 1))
 
 
         btn1 = tk.Button(btn_frame, text='OK', font=BUTTON)
@@ -267,6 +269,8 @@ class Application(tk.Frame):
         message["Subject"] = f'Daily Report ({date.today().strftime("%m/%d/%y")})'
         message["From"] = sender_email
         message["To"] = receiver_email
+
+        print(body)
 
         # Create the HTML version of your message
         html = convert_to_html(body)
