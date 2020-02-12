@@ -14,6 +14,8 @@ Main Goal
 
 - this application will have menu bar in the top of the application. (ver.0.5)
 
+- this application will save/edit its current settings (ver.0.6)
+
 Fixed
 - UnicodeEncodeError: 'ascii' codec can't encode character '\u2013' in position 136: ordinal not in range(128)
     * Decide to use 'email' library to handel unicode Error
@@ -21,3 +23,6 @@ Fixed
     * it will check whether saved file exists or not, if not it will create a new file.
 - Application.self.today(Date) value update issue:
     * the value will be update when the app did auto-saving.
+
+Issue
+- Currently this application cannot save its settings information.
