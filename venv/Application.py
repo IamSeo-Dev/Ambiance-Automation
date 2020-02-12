@@ -46,6 +46,12 @@ class Application(tk.Frame):
 
     def do_nothing(self):
         print('nothing')
+        #self.create_settings_widgets()
+
+    def create_settings_widgets(self):
+        print('settings')
+        settings = tk.Toplevel(self.master)
+
 
     def update_today_date(self):
         self.today = date.today().strftime("%m/%d/%y")
@@ -89,7 +95,7 @@ class Application(tk.Frame):
         file_menu.add_command(label='Open...', command=self.do_nothing)
         file_menu.add_command(label='Save...', command=self.save)
         file_menu.add_separator()
-        file_menu.add_command(label='Settings', command=self.do_nothing)
+        file_menu.add_command(label='Settings', command=self.do_nothing())
         file_menu.add_separator()
         file_menu.add_command(label='Exit', command=self.save_and_quit)
         self.menu_bar.add_cascade(label='File', menu=file_menu)
