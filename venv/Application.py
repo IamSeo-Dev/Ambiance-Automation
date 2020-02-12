@@ -8,6 +8,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import config
 import time
+from font import *
 
 
 def convert_to_html(body):
@@ -46,11 +47,75 @@ class Application(tk.Frame):
 
     def do_nothing(self):
         print('nothing')
-        #self.create_settings_widgets()
 
     def create_settings_widgets(self):
-        print('settings')
-        settings = tk.Toplevel(self.master)
+        settings = tk.Toplevel()
+        settings.title('Settings')
+        settings.geometry('420x600')
+
+        settings_tab_control = ttk.Notebook(settings)
+        btn_frame = ttk.Frame(settings, height=30)
+        btn_frame.pack(side='bottom', fill='x')
+        btn_frame.columnconfigure(0, weight=1)
+        btn_frame.columnconfigure(1, weight=1)
+
+        general_settings_frame = ttk.Frame(settings_tab_control)
+        email_settings_frame = ttk.Frame(settings_tab_control)
+        daily_settings_frame = ttk.Frame(settings_tab_control)
+        weekly_settings_frame = ttk.Frame(settings_tab_control)
+        backup_frame = ttk.Frame(settings_tab_control)
+        todo_frame = ttk.Frame(settings_tab_control)
+
+        settings_tab_control.add(general_settings_frame, text='General')
+        settings_tab_control.add(email_settings_frame, text=' Email ')
+        settings_tab_control.add(daily_settings_frame, text='  Daily  ')
+        settings_tab_control.add(todo_frame, text='  Todo  ')
+        settings_tab_control.add(weekly_settings_frame, text='Weekly')
+        settings_tab_control.add(backup_frame, text='Backup')
+
+
+        settings_tab_control.pack(fill='both', expand=True)
+
+        email_title_1 = ttk.Label(email_settings_frame, text='Server Information', font=TITLE)
+        email_title_1.grid(row=0, sticky='W', padx=(5, 1), pady=(10, 1))
+        email_content_1_1 = ttk.Label(email_settings_frame, text='Outgoing Mail Server(SMTP) : ', font=CONTENT)
+        email_content_1_1.grid(row=1, sticky='W', padx=(10, 2))
+        email_content_1_2 = ttk.Label(email_settings_frame, text='Server Port Number(SSL) : ', font=CONTENT)
+        email_content_1_2.grid(row=2, sticky='W', padx=(10, 2))
+
+        email_title_2 = ttk.Label(email_settings_frame, text='Logon Information', font=TITLE)
+        email_title_2.grid(row=3, sticky='W', padx=(5, 1), pady=(10, 1))
+        email_content_2_1 = ttk.Label(email_settings_frame, text='UserName : ', font=CONTENT)
+        email_content_2_1.grid(row=4, sticky='W', padx=(10, 2))
+        email_content_2_2 = ttk.Label(email_settings_frame, text='Password : ', font=CONTENT)
+        email_content_2_2.grid(row=5, sticky='W', padx=(10, 2))
+
+        email_entry1 = ttk.Entry(email_settings_frame, justify='center', width=40)
+        email_entry1.grid(row=1, column=1)
+        email_entry1.insert(0, config.general_settings['outgoing_mail_server'])
+        # Todo
+        # need to call from config.py file
+        email_entry2 = ttk.Entry(email_settings_frame, justify='center', width=40)
+        email_entry2.grid(row=2, column=1)
+        email_entry2.insert(0, config.general_settings['server_port_number_SSL'])
+        email_entry3 = ttk.Entry(email_settings_frame, justify='center', width=40)
+        email_entry3.grid(row=4, column=1)
+        email_entry3.insert(0, config.general_settings['username'])
+        email_entry4 = ttk.Entry(email_settings_frame, justify='center', width=40, show='*')
+        email_entry4.grid(row=5, column=1)
+        email_entry4.insert(0, config.general_settings['password'])
+        test_btn = tk.Button(email_settings_frame, text='Send Test Email', font=BUTTON)
+        test_btn.grid(row=6, column=1, pady=(10,1))
+
+
+        btn1 = tk.Button(btn_frame, text='OK', font=BUTTON)
+        btn1.grid(row=0, column=0, sticky='we')
+        btn2 = tk.Button(btn_frame, text='Cancel', font=BUTTON)
+        btn2.grid(row=0, column=1, sticky='we')
+
+
+
+        settings.mainloop()
 
 
     def update_today_date(self):
@@ -95,7 +160,7 @@ class Application(tk.Frame):
         file_menu.add_command(label='Open...', command=self.do_nothing)
         file_menu.add_command(label='Save...', command=self.save)
         file_menu.add_separator()
-        file_menu.add_command(label='Settings', command=self.do_nothing())
+        file_menu.add_command(label='Settings', command=lambda: self.create_settings_widgets())
         file_menu.add_separator()
         file_menu.add_command(label='Exit', command=self.save_and_quit)
         self.menu_bar.add_cascade(label='File', menu=file_menu)
@@ -105,12 +170,12 @@ class Application(tk.Frame):
         self.menu_bar.add_cascade(label='Help', menu=help_menu)
 
         # Tab Menu
-        #self.content_frame = tk.Frame(self.master).grid(row=1, rowspan=6)
+
         self.tab_control = ttk.Notebook(self.master)
         self.tab_control.grid(row=1, sticky='wens')
-        self.daily_frame = ttk.Frame()
-        self.weekly_frame = ttk.Frame()
-        self.backup_frame = ttk.Frame()
+        self.daily_frame = ttk.Frame(self.tab_control)
+        self.weekly_frame = ttk.Frame(self.tab_control)
+        self.backup_frame = ttk.Frame(self.tab_control)
 
         # Notebook (Tab Frames)
 
@@ -122,21 +187,21 @@ class Application(tk.Frame):
         self.tab_control.add(self.backup_frame, text='Backup', image=self.backup_icon, compound='top')
 
         # Content Frame - Daily
-        self.daily_report_title_label = ttk.Label(self.daily_frame, text='Daily Report')
+        self.daily_report_title_label = ttk.Label(self.daily_frame, text='Daily Report', font=TITLE)
         self.daily_report_title_label.grid(row=2, sticky='w', columnspan=2)
         self.daily_report_text = tk.Text(self.daily_frame)
         self.daily_report_text.grid(row=3, columnspan=2)
 
         # Content Frame - Todo
-        self.todo_list_title_label = ttk.Label(self.daily_frame, text='Todo List')
+        self.todo_list_title_label = ttk.Label(self.daily_frame, text='Todo List', font=TITLE)
         self.todo_list_title_label.grid(row=4, sticky='w', columnspan=2)
         self.todo_list_text = tk.Text(self.daily_frame)
         self.todo_list_text.grid(row=5, columnspan=2)
 
         # Content Frame - Btn
-        self.send_btn = tk.Button(self.daily_frame, text='Send', command=self.send_daily_report)
+        self.send_btn = tk.Button(self.daily_frame, text='Send', command=self.send_daily_report, font=BUTTON)
         self.send_btn.grid(row=6, column=0, sticky='we')
-        self.save_btn = tk.Button(self.daily_frame, text='Save', command=self.save)
+        self.save_btn = tk.Button(self.daily_frame, text='Save', command=self.save, font=BUTTON)
         self.save_btn.grid(row=6, column=1, sticky='we')
 
         # Status Frame
